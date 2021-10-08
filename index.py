@@ -3,9 +3,13 @@ import pygame.freetype
 import string
 import random
 
-words=['car','bus','baby','lamborghini']
+words=['CAR','BUS','BABY','LAMBORGHINI']
 choice=random.choice(words)
+word_list=list(choice)
 collection=[]
+ans=[]
+for empty in range(len(word_list)):
+    ans.append("")
 mouseX=None
 mouseY=None
 countOnce=0
@@ -80,8 +84,11 @@ def make_blank_space():
     elif(len(choice)<=16):
         initX=50
     font=pygame.font.Font(None,80)
-    for x in range(len(choice)):
-        text=font.render("_",True,black) 
+    for x in range(len(ans)):
+        if(ans[x]==""):
+            text=font.render("_",True,black) 
+        else:
+            text=font.render(ans[x],True,black)
         screen.blit(text,(initX,initY))   
         initX+=50
         
@@ -97,15 +104,28 @@ while 1:
             mouseX= pygame.mouse.get_pos()[0]
             mouseY= pygame.mouse.get_pos()[1]
             for i in range(26):
+                location=[]
+                count=0
                 btn=checkContain(collection[i][0],collection[i][1],mouseX,mouseY,collection[i][2])
                 if(btn!=None):
-                    print(alphabet[btn])
-                    break
+                    for j in range(len(word_list)):
+                        if(alphabet[btn]==word_list[j]):
+                            ans[j]=word_list[j]
+                            count=count+1
+                    if count==0:
+                        print("Punish")
+                    else:
+                        break    
+                    
         if event.type == pygame.QUIT:sys.exit()
     
+ 
     
+
     make_blank_space()
     display_text(black, 40, 340, 30, "Hangman")
     make_keyboard()
+    
     pygame.display.flip()
     screen.fill(white)
+pygame.time.wait(5000)
